@@ -1,9 +1,20 @@
 {
-  "buildCommand": "pnpm --workspace-root exec turbo --no-daemon --filter docs build --env-mode loose",
-  "installCommand": "node -v && pnpm --workspace-root --filter docs... install --config.dedupe-peer-dependents=false",
+  "buildCommand": "pnpm --workspace-root exec turbo --no-daemon --filter main --filter docs build --env-mode loose --force",
+  "installCommand": "node -v && pnpm --workspace-root --filter main... --filter docs... install --config.dedupe-peer-dependents=false",
   "build": {
     "env": {
-      "ENABLE_EXPERIMENTAL_COREPACK": "1"
+      "ENABLE_EXPERIMENTAL_COREPACK": "1",
+      "VERCEL_DEBUG_BUILD": "1"
     }
-  }
+  },
+  "routes": [
+    {
+      "src": "/docs(.*)",
+      "dest": "/apps/docs$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/apps/main/$1"
+    }
+  ]
 }
