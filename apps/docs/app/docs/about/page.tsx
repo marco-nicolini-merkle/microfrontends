@@ -34,8 +34,6 @@ export default function AboutPage() {
                     <Link href="/docs/about">About Kiosk</Link>
                 </li>
             </ul>
-
-            
         </Page>
     )
 }
