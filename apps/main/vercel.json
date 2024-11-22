@@ -5,5 +5,15 @@
     "env": {
       "ENABLE_EXPERIMENTAL_COREPACK": "1"
     }
-  }
+  },
+  "routes": [
+    {
+      "src": "/docs(.*)",
+      "dest": "apps/docs$1"
+    },
+    {
+      "src": "(.*)",
+      "dest": "apps/main$1"
+    }
+  ]
 }
