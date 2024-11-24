@@ -15,7 +15,7 @@
     "@acme/components": "workspace:*",
     "@acme/design-system": "workspace:*",
     "@acme/utils": "workspace:*",
-    "merkle-components": "workspace:*",
+    "@merkle/components": "workspace:*",
     "@vercel/examples-ui": "^1.0.4",
     "next": "^14.2.0",
     "react": "^18.3.1",
