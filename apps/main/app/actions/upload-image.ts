@@ -13,7 +13,7 @@ export async function uploadImage(formData: FormData): Promise<{ success: boolea
     const headersList = headers()
     const host = headersList.get('host')
     const proto = process.env.NODE_ENV === 'production' ? 'https' : 'http'
-    process.env.NEXT_PUBLIC_BASE_URL = `${proto}://${host}`
+    const BASE_URL = `${proto}://${host}`
 
     try {
         const bytes = await file.arrayBuffer()
@@ -23,7 +23,7 @@ export async function uploadImage(formData: FormData): Promise<{ success: boolea
         await writeFile(path, buffer)
 
         // Send the buffer to the API route
-        const apiResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/api4aiocr`, {
+        const apiResponse = await fetch(`${BASE_URL}/api/api4aiocr`, {
             method: 'POST',
             body: buffer,
         })
