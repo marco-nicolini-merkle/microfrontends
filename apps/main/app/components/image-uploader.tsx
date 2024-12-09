@@ -19,13 +19,13 @@ function SubmitButton({fileSelected}: { fileSelected: boolean }) {
 
 export default function ImageUploader() {
     const [preview, setPreview] = React.useState<string | null>(null)
-    const [state, setState] = React.useState({
-        success: false,
-        path: null,
-        error: null,
-        uploadedImageUrl: null,
-        ocrResult: null
-    })
+    const [state, setState] = React.useState<{
+        success: boolean;
+        path: string | null;
+        error: string | null;
+        uploadedImageUrl: string | null;
+        ocrResult: any | null;
+    }>({success: false, path: null, error: null, uploadedImageUrl: null, ocrResult: null});
     const [isPending, startTransition] = React.useTransition()
     const [fileSelected, setFileSelected] = React.useState(false)
     const formRef = React.useRef<HTMLFormElement>(null)
@@ -52,7 +52,7 @@ export default function ImageUploader() {
             const result = await uploadImage(formData)
             setState({
                 ...result,
-                uploadedImageUrl: result.success ? result.path : null,
+                uploadedImageUrl: result.path || null,
                 ocrResult: result.ocrResult
             })
             if (result.success) {

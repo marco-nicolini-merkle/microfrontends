@@ -12,7 +12,7 @@ export async function uploadImage(formData: FormData): Promise<{ success: boolea
 
     const headersList = headers()
     const host = headersList.get('host')
-    const proto = process.env.NODE_ENV === 'production' ? 'https' : 'http'
+    const proto = 'http' //process.env.NODE_ENV === 'production' ? 'https' : 'http'
     const BASE_URL = `${proto}://${host}`
 
     try {
