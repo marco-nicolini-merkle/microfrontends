@@ -1,4 +1,5 @@
 import {A, Link, Page, Text} from '@vercel/examples-ui'
+import ImageUploader from "./components/image-uploader";
 
 export default function Home(): React.ReactNode {
     return (
@@ -21,6 +22,11 @@ export default function Home(): React.ReactNode {
                     <A href="/docs">Kiosk App (Multi-Zones App)</A>
                 </li>
             </ul>
+
+            <div className="bg-gray-100 flex flex-col items-center justify-center p-3 mt-10">
+                <h1 className="text-3xl font-bold text-gray-800">Driver's License Processing</h1>
+                <ImageUploader/>
+            </div>
         </Page>
     )
 }
