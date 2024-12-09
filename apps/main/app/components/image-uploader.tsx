@@ -116,7 +116,7 @@ export default function ImageUploader() {
             {state.ocrResult && (
                 <div className="mt-4">
                     <h3 className="text-lg font-semibold mb-2">OCR Result:</h3>
-                    <p><strong>Driver's License:</strong> {state.ocrResult.driverLicense}</p>
+                    <p><strong>Driver&apos;s License:</strong> {state.ocrResult.driverLicense}</p>
                     <p><strong>Full Name:</strong> {state.ocrResult.fullName}</p>
                 </div>
             )}
