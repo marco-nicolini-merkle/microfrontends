@@ -2,12 +2,18 @@
 
 import {writeFile} from 'fs/promises'
 import {join} from 'path'
+import {headers} from 'next/headers'
 
-export async function uploadImage(formData: FormData): Promise<{ success: boolean; path: string | null; error: string | null }> {
+export async function uploadImage(formData: FormData): Promise<{ success: boolean; path: string | null; error: string | null; ocrResult?: any }> {
     const file = formData.get('image') as File
     if (!file) {
         return {success: false, error: 'No file uploaded', path: null}
     }
+
+    const headersList = headers()
+    const host = headersList.get('host')
+    const proto = process.env.NODE_ENV === 'production' ? 'https' : 'http'
+    process.env.NEXT_PUBLIC_BASE_URL = `${proto}://${host}`
 
     try {
         const bytes = await file.arrayBuffer()
@@ -16,9 +22,27 @@ export async function uploadImage(formData: FormData): Promise<{ success: boolea
         const path = join(process.cwd(), 'public', 'images', file.name)
         await writeFile(path, buffer)
 
-        return {success: true, path: `/images/${file.name}`, error: null}
+        // Send the buffer to the API route
+        const apiResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/api4aiocr`, {
+            method: 'POST',
+            body: buffer,
+        })
+
+        if (!apiResponse.ok) {
+            throw new Error('API request failed')
+        }
+
+        const ocrResult = await apiResponse.json()
+
+        return {
+            success: true,
+            path: `/images/${file.name}`,
+            error: null,
+            ocrResult
+        }
     } catch (error) {
-        return {success: false, error: 'Failed to upload image', path: null}
+        console.error('Error in uploadImage:', error)
+        return {success: false, error: 'Failed to upload image or process OCR', path: null}
     }
 }
 

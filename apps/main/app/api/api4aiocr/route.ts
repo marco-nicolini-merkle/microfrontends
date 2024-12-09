@@ -1,7 +1,4 @@
 import {NextRequest, NextResponse} from 'next/server';
-import * as path from 'path';
-
-import {promises as fs} from 'fs';
 
 const API_URL = 'https://demo.api4ai.cloud/ocr/v1/results?algo=simple-words';
 const ID_MARK = '4d.DLN';
@@ -38,13 +35,12 @@ function findTextBelow(words: WordInfo[], wordInfo: WordInfo): WordInfo {
     return candidate;
 }
 
-export async function GET(request: NextRequest) {
+export async function POST(request: NextRequest) {
     try {
-        const imagePath = path.join(process.cwd(), 'public', 'images', 'sample-dl-dc.jpeg');
-        const imageBuffer = await fs.readFile(imagePath);
+        const buffer = await request.arrayBuffer();
 
         const formData = new FormData();
-        formData.append('image', new Blob([imageBuffer]), 'sample-dl-dc.jpeg');
+        formData.append('image', new Blob([buffer]), 'image.jpg');
 
         const response = await fetch(API_URL, {
             method: 'POST',

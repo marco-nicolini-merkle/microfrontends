@@ -19,7 +19,13 @@ function SubmitButton({fileSelected}: { fileSelected: boolean }) {
 
 export default function ImageUploader() {
     const [preview, setPreview] = React.useState<string | null>(null)
-    const [state, setState] = React.useState({success: false, path: null, error: null, uploadedImageUrl: null})
+    const [state, setState] = React.useState({
+        success: false,
+        path: null,
+        error: null,
+        uploadedImageUrl: null,
+        ocrResult: null
+    })
     const [isPending, startTransition] = React.useTransition()
     const [fileSelected, setFileSelected] = React.useState(false)
     const formRef = React.useRef<HTMLFormElement>(null)
@@ -44,9 +50,14 @@ export default function ImageUploader() {
         const formData = new FormData(event.currentTarget)
         startTransition(async () => {
             const result = await uploadImage(formData)
-            setState({...result, uploadedImageUrl: result.success ? result.path : null})
+            setState({
+                ...result,
+                uploadedImageUrl: result.success ? result.path : null,
+                ocrResult: result.ocrResult
+            })
             if (result.success) {
                 setPreview(null)
+                setFileSelected(false)
                 formRef.current?.reset()
             }
         })
@@ -61,7 +72,7 @@ export default function ImageUploader() {
                         htmlFor="image-upload"
                         className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100"
                     >
-                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                        <div className="flex flex-col items-center justify-center p-5">
                             <svg className="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor"
                                  viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -101,6 +112,13 @@ export default function ImageUploader() {
             )}
             {state.success && (
                 <p className="mt-4 text-sm text-green-600">Image uploaded successfully!</p>
+            )}
+            {state.ocrResult && (
+                <div className="mt-4">
+                    <h3 className="text-lg font-semibold mb-2">OCR Result:</h3>
+                    <p><strong>Driver's License:</strong> {state.ocrResult.driverLicense}</p>
+                    <p><strong>Full Name:</strong> {state.ocrResult.fullName}</p>
+                </div>
             )}
         </div>
     )
