@@ -38,6 +38,9 @@
         "name": "next"
       }
     ],
+    "types": [
+      "node"
+    ],
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
   },
   "include": [
